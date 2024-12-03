@@ -21,18 +21,18 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/signup", "/login", "/css/**").permitAll()
+                .requestMatchers("/", "/index.html", "/static/**", "/signup", "/auth/login", "/css/**", "/js/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/home", true)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout().logoutSuccessUrl("/login");
 
         return http.build();
@@ -47,6 +47,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
 
 
 }

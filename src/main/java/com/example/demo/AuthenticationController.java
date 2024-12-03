@@ -1,4 +1,6 @@
 package com.example.demo;
+import ch.qos.logback.core.model.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -6,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/")
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
@@ -20,14 +22,19 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
+    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(username, password)
         );
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return jwtUtil.generateToken(userDetails.getUsername());
+        System.out.println("asdasdsdaasdasd");
+        String token = jwtUtil.generateToken(userDetails.getUsername());
+        System.out.println(token);
+        return ResponseEntity.ok(token);
+
     }
+
 }
 
 class LoginRequest {

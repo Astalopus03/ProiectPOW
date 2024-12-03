@@ -17,11 +17,11 @@ public class SignupController {
     }
 
     @PostMapping("/signup")
-    public String signup(@RequestBody SignupRequest request) {
+    public String signup(@RequestParam String username, @RequestParam String password) {
         User user = new User();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRoles(Set.of("USER")); // Poți adăuga roluri suplimentare
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRoles(Set.of("USER"));
 
         userRepository.save(user);
         System.out.println("sunt aicisia");

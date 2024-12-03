@@ -5,18 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WebController {
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @GetMapping("/signup")
-    public String signup() {
-        return "signup";
-    }
-
-    @GetMapping("/home")
-    public String home() {
-        return "home";
+    @GetMapping("/{path:[^\\.]*}")
+    public String index() {
+        return "forward:/index.html";
     }
 }
